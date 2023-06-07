@@ -24,6 +24,7 @@ import net.sf.jsqlparser.statement.ExplainStatement;
 import net.sf.jsqlparser.statement.ResetStatement;
 import net.sf.jsqlparser.statement.SetStatement;
 import net.sf.jsqlparser.statement.ShowColumnsStatement;
+import net.sf.jsqlparser.statement.ShowFullColumnsStatement;
 import net.sf.jsqlparser.statement.ShowStatement;
 import net.sf.jsqlparser.statement.UseStatement;
 import net.sf.jsqlparser.statement.alter.Alter;
@@ -572,10 +573,18 @@ public enum Feature {
      * @see ShowTablesStatement
      */
     showTables,
+   /**
+     * @see ShowTableStatusStatement
+     */
+    showTableStatus,
     /**
      * @see ShowColumnsStatement
      */
     showColumns,
+    /**
+     * @see ShowFullColumnsStatement
+     */
+    showFullColumns,
     /**
      * @see ShowIndexStatement
      */

@@ -23,6 +23,7 @@ import net.sf.jsqlparser.statement.RollbackStatement;
 import net.sf.jsqlparser.statement.SavepointStatement;
 import net.sf.jsqlparser.statement.SetStatement;
 import net.sf.jsqlparser.statement.ShowColumnsStatement;
+import net.sf.jsqlparser.statement.ShowFullColumnsStatement;
 import net.sf.jsqlparser.statement.ShowStatement;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.StatementVisitor;
@@ -52,6 +53,7 @@ import net.sf.jsqlparser.statement.grant.Grant;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.merge.Merge;
 import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.statement.show.ShowTableStatusStatement;
 import net.sf.jsqlparser.statement.show.ShowIndexStatement;
 import net.sf.jsqlparser.statement.show.ShowTablesStatement;
 import net.sf.jsqlparser.statement.truncate.Truncate;
@@ -173,7 +175,10 @@ public class StatementValidator extends AbstractValidator<Statement> implements 
     public void visit(ShowColumnsStatement show) {
         getValidator(ShowColumnsStatementValidator.class).validate(show);
     }
-
+    @Override
+    public void visit(ShowFullColumnsStatement show) {
+        getValidator(ShowFullColumnsStatementValidator.class).validate(show);
+    }
     @Override
     public void visit(ShowIndexStatement show) {
         getValidator(ShowIndexStatementValidator.class).validate(show);
@@ -182,6 +187,10 @@ public class StatementValidator extends AbstractValidator<Statement> implements 
     @Override
     public void visit(ShowTablesStatement showTables) {
         getValidator(ShowTablesStatementValidator.class).validate(showTables);
+    }
+    @Override
+    public void visit(ShowTableStatusStatement showTableStatus) {
+        validateFeature(Feature.showTableStatus);
     }
 
     @Override

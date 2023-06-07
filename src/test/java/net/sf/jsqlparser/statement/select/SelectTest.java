@@ -410,8 +410,7 @@ public class SelectTest {
         assertNull(offset);
         assertTrue(rowCount instanceof AllValue);
 
-        assertEquals(new LongValue(5),
-                select.getOffset().getOffset());
+        assertEquals(new LongValue(5), select.getOffset().getOffset());
         assertTrue(select.getLimit().isLimitAll());
         assertFalse(select.getLimit().isLimitNull());
         assertSqlCanBeParsedAndDeparsed(statement);

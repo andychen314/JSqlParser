@@ -392,6 +392,7 @@ TOKEN: /* SQL Keywords. prefixed with K_ to avoid name clashes */
 |   <K_SYSTEM:"SYSTEM">
 |   <K_TABLE:"TABLE">
 |   <K_TABLES:"TABLES">
+|   <K_STATUS:"STATUS">
 |   <K_TABLESPACE: "TABLESPACE">
 |   <K_TRIGGER: "TRIGGER">
 |   <K_THEN:"THEN">
@@ -1141,9 +1142,13 @@ Statement Show():
     (
         LOOKAHEAD(2) statement = ShowColumns()
         |
+        LOOKAHEAD(2) statement = ShowFullColumns()
+        |
         LOOKAHEAD(2) statement = ShowIndex()
         |
         LOOKAHEAD(2) statement = ShowTables()
+        |
+        LOOKAHEAD(2) statement = ShowTableStatus()
         |
         // any of the RDBMS specific SHOW syntax
         captureRest = captureRest()
@@ -1157,6 +1162,16 @@ Statement Show():
     )
     {
         return statement;
+    }
+}
+
+ShowFullColumnsStatement ShowFullColumns(): {
+    String tableName;
+}
+{
+    <K_FULL> <K_COLUMNS> <K_FROM> tableName = RelObjectNameExt()
+    {
+        return new ShowFullColumnsStatement(tableName);
     }
 }
 
@@ -1210,6 +1225,16 @@ ShowTablesStatement ShowTables(): {
     showTablesStatement.setWhereCondition(whereCondition);
     return showTablesStatement;
   }
+}
+
+ShowTableStatusStatement ShowTableStatus(): {
+  ShowTableStatusStatement statement=new ShowTableStatusStatement();
+}
+{
+    <K_TABLE> <K_STATUS>
+    {
+        return statement;
+    }
 }
 
 Values Values(): {

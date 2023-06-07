@@ -30,6 +30,7 @@ import net.sf.jsqlparser.statement.grant.Grant;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.merge.Merge;
 import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.statement.show.ShowTableStatusStatement;
 import net.sf.jsqlparser.statement.show.ShowIndexStatement;
 import net.sf.jsqlparser.statement.show.ShowTablesStatement;
 import net.sf.jsqlparser.statement.truncate.Truncate;
@@ -152,6 +153,12 @@ public class StatementVisitorAdapter implements StatementVisitor {
 
     @Override
     public void visit(ShowColumnsStatement set) {}
+    @Override
+    public void visit(ShowFullColumnsStatement set) {}
+
+    @Override
+    public void visit(ShowTableStatusStatement set) {
+    }
 
     @Override
     public void visit(ShowIndexStatement set) {}

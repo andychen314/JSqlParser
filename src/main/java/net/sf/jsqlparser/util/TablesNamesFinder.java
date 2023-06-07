@@ -114,6 +114,7 @@ import net.sf.jsqlparser.statement.RollbackStatement;
 import net.sf.jsqlparser.statement.SavepointStatement;
 import net.sf.jsqlparser.statement.SetStatement;
 import net.sf.jsqlparser.statement.ShowColumnsStatement;
+import net.sf.jsqlparser.statement.ShowFullColumnsStatement;
 import net.sf.jsqlparser.statement.ShowStatement;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.StatementVisitor;
@@ -156,6 +157,7 @@ import net.sf.jsqlparser.statement.select.SetOperationList;
 import net.sf.jsqlparser.statement.select.TableFunction;
 import net.sf.jsqlparser.statement.select.Values;
 import net.sf.jsqlparser.statement.select.WithItem;
+import net.sf.jsqlparser.statement.show.ShowTableStatusStatement;
 import net.sf.jsqlparser.statement.show.ShowIndexStatement;
 import net.sf.jsqlparser.statement.show.ShowTablesStatement;
 import net.sf.jsqlparser.statement.truncate.Truncate;
@@ -844,7 +846,10 @@ public class TablesNamesFinder implements SelectVisitor, FromItemVisitor, Expres
     public void visit(ShowColumnsStatement set) {
         throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
     }
-
+    @Override
+    public void visit(ShowFullColumnsStatement set) {
+        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+    }
     @Override
     public void visit(ShowIndexStatement showIndex) {
         throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
@@ -1036,6 +1041,12 @@ public class TablesNamesFinder implements SelectVisitor, FromItemVisitor, Expres
     public void visit(ShowTablesStatement showTables) {
         throw new UnsupportedOperationException(
                 "Finding tables from ShowTablesStatement is not supported");
+    }
+
+    @Override
+    public void visit(ShowTableStatusStatement showTables) {
+        throw new UnsupportedOperationException(
+            "Finding tables from ShowTablesStatement is not supported");
     }
 
     @Override

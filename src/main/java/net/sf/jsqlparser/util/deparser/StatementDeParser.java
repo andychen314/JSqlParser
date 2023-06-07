@@ -22,6 +22,7 @@ import net.sf.jsqlparser.statement.RollbackStatement;
 import net.sf.jsqlparser.statement.SavepointStatement;
 import net.sf.jsqlparser.statement.SetStatement;
 import net.sf.jsqlparser.statement.ShowColumnsStatement;
+import net.sf.jsqlparser.statement.ShowFullColumnsStatement;
 import net.sf.jsqlparser.statement.ShowStatement;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.StatementVisitor;
@@ -52,6 +53,7 @@ import net.sf.jsqlparser.statement.merge.MergeInsert;
 import net.sf.jsqlparser.statement.merge.MergeUpdate;
 import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.select.WithItem;
+import net.sf.jsqlparser.statement.show.ShowTableStatusStatement;
 import net.sf.jsqlparser.statement.show.ShowIndexStatement;
 import net.sf.jsqlparser.statement.show.ShowTablesStatement;
 import net.sf.jsqlparser.statement.truncate.Truncate;
@@ -73,7 +75,7 @@ public class StatementDeParser extends AbstractDeParser<Statement> implements St
     }
 
     public StatementDeParser(ExpressionDeParser expressionDeParser, SelectDeParser selectDeParser,
-            StringBuilder buffer) {
+        StringBuilder buffer) {
         super(buffer);
 
         this.expressionDeParser = expressionDeParser;
@@ -125,7 +127,7 @@ public class StatementDeParser extends AbstractDeParser<Statement> implements St
     @Override
     public void visit(Insert insert) {
         InsertDeParser insertDeParser =
-                new InsertDeParser(expressionDeParser, selectDeParser, buffer);
+            new InsertDeParser(expressionDeParser, selectDeParser, buffer);
         insertDeParser.deParse(insert);
     }
 
@@ -184,14 +186,14 @@ public class StatementDeParser extends AbstractDeParser<Statement> implements St
     @Override
     public void visit(SetStatement set) {
         SetStatementDeParser setStatementDeparser =
-                new SetStatementDeParser(expressionDeParser, buffer);
+            new SetStatementDeParser(expressionDeParser, buffer);
         setStatementDeparser.deParse(set);
     }
 
     @Override
     public void visit(ResetStatement reset) {
         ResetStatementDeParser setStatementDeparser =
-                new ResetStatementDeParser(expressionDeParser, buffer);
+            new ResetStatementDeParser(expressionDeParser, buffer);
         setStatementDeparser.deParse(reset);
     }
 
@@ -201,7 +203,7 @@ public class StatementDeParser extends AbstractDeParser<Statement> implements St
         List<WithItem> withItemsList = merge.getWithItemsList();
         if (withItemsList != null && !withItemsList.isEmpty()) {
             buffer.append("WITH ");
-            for (Iterator<WithItem> iter = withItemsList.iterator(); iter.hasNext();) {
+            for (Iterator<WithItem> iter = withItemsList.iterator(); iter.hasNext(); ) {
                 iter.next().accept(expressionDeParser);
                 if (iter.hasNext()) {
                     buffer.append(",");
@@ -278,7 +280,7 @@ public class StatementDeParser extends AbstractDeParser<Statement> implements St
     @Override
     public void visit(Upsert upsert) {
         UpsertDeParser upsertDeParser =
-                new UpsertDeParser(expressionDeParser, selectDeParser, buffer);
+            new UpsertDeParser(expressionDeParser, selectDeParser, buffer);
         upsertDeParser.deParse(upsert);
     }
 
@@ -291,7 +293,10 @@ public class StatementDeParser extends AbstractDeParser<Statement> implements St
     public void visit(ShowColumnsStatement show) {
         new ShowColumnsStatementDeParser(buffer).deParse(show);
     }
-
+    @Override
+    public void visit(ShowFullColumnsStatement show) {
+        new ShowFullColumnsStatementDeParser(buffer).deParse(show);
+    }
     @Override
     public void visit(ShowIndexStatement showIndexes) {
         new ShowIndexStatementDeParser(buffer).deParse(showIndexes);
@@ -300,6 +305,11 @@ public class StatementDeParser extends AbstractDeParser<Statement> implements St
     @Override
     public void visit(ShowTablesStatement showTables) {
         new ShowTablesStatementDeparser(buffer).deParse(showTables);
+    }
+
+    @Override
+    public void visit(ShowTableStatusStatement showTableStatus) {
+        buffer.append(showTableStatus.toString());
     }
 
     @Override
@@ -333,7 +343,7 @@ public class StatementDeParser extends AbstractDeParser<Statement> implements St
         buffer.append("EXPLAIN ");
         if (explain.getOptions() != null) {
             buffer.append(explain.getOptions().values().stream()
-                    .map(ExplainStatement.Option::formatOption).collect(Collectors.joining(" ")));
+                .map(ExplainStatement.Option::formatOption).collect(Collectors.joining(" ")));
             buffer.append(" ");
         }
         explain.getStatement().accept(this);

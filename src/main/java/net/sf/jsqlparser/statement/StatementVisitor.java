@@ -30,6 +30,7 @@ import net.sf.jsqlparser.statement.grant.Grant;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.merge.Merge;
 import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.statement.show.ShowTableStatusStatement;
 import net.sf.jsqlparser.statement.show.ShowIndexStatement;
 import net.sf.jsqlparser.statement.show.ShowTablesStatement;
 import net.sf.jsqlparser.statement.truncate.Truncate;
@@ -80,9 +81,13 @@ public interface StatementVisitor {
 
     void visit(ShowColumnsStatement set);
 
+    void visit(ShowFullColumnsStatement set);
+
     void visit(ShowIndexStatement showIndex);
 
     void visit(ShowTablesStatement showTables);
+
+    void visit(ShowTableStatusStatement set);
 
     void visit(Merge merge);
 
